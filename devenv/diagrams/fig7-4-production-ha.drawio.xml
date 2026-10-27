@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Fig7.4-ProductionHA" id="fig74">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Figure 7.4 - Development Container vs. Production HA Deployment (US region shown)" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="10" width="900" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="devBox" value="Development (this repository)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="360" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="devUI" value="1x rewards-ui container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="90" y="100" width="300" height="40" as="geometry"/></mxCell>
+        <mxCell id="devAPI" value="1x rewards-api container&#10;in-memory budget state" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="90" y="150" width="300" height="50" as="geometry"/></mxCell>
+        <mxCell id="devMC" value="1x multichain-us container&#10;single local volume" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="90" y="210" width="300" height="50" as="geometry"/></mxCell>
+        <mxCell id="devNote" value="No load balancer, no TLS,&#10;no secrets manager, single AZ" style="text;html=1;fontSize=10;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="90" y="270" width="300" height="40" as="geometry"/></mxCell>
+
+        <mxCell id="prodBox" value="Production (Section 7.9 / docs/production-notes.md)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="60" width="560" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="lb" value="Regional load balancer (TLS termination)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="510" y="100" width="500" height="40" as="geometry"/></mxCell>
+        <mxCell id="uiA" value="rewards-ui replica A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="510" y="160" width="230" height="40" as="geometry"/></mxCell>
+        <mxCell id="uiB" value="rewards-ui replica B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="780" y="160" width="230" height="40" as="geometry"/></mxCell>
+        <mxCell id="apiA" value="rewards-api replica A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="510" y="220" width="230" height="40" as="geometry"/></mxCell>
+        <mxCell id="apiB" value="rewards-api replica B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="780" y="220" width="230" height="40" as="geometry"/></mxCell>
+        <mxCell id="db" value="Multi-AZ operational database&#10;(budgets, EmpID lookup backup)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="510" y="280" width="500" height="45" as="geometry"/></mxCell>
+        <mxCell id="gw" value="US-NODE-03: API gateway node (Table 5.2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="510" y="345" width="500" height="40" as="geometry"/></mxCell>
+        <mxCell id="v1" value="US-NODE-01 Validator+Admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="510" y="400" width="230" height="40" as="geometry"/></mxCell>
+        <mxCell id="v2" value="US-NODE-02 Validator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="780" y="400" width="230" height="40" as="geometry"/></mxCell>
+
+        <mxCell id="e1" style="html=1;" edge="1" parent="1" source="lb" target="uiA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="html=1;" edge="1" parent="1" source="lb" target="uiB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="html=1;" edge="1" parent="1" source="uiA" target="apiA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="html=1;" edge="1" parent="1" source="uiB" target="apiB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="html=1;" edge="1" parent="1" source="apiA" target="db"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="html=1;" edge="1" parent="1" source="apiB" target="db"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="html=1;" edge="1" parent="1" source="apiA" target="gw"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="html=1;" edge="1" parent="1" source="apiB" target="gw"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="html=1;" edge="1" parent="1" source="gw" target="v1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="html=1;" edge="1" parent="1" source="gw" target="v2"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

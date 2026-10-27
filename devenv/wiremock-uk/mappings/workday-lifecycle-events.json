@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "url": "/workday/v1/lifecycle-events" },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "region": "uk-london",
+      "events": [
+        { "workdayEventId": "wd-evt-uk-55210001", "employeeId": "emp-ps-7d21ee0b", "eventType": "professional-certification" }
+      ]
+    },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

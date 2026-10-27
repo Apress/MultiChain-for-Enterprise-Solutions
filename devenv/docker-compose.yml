@@ -1,0 +1,184 @@
+# Meridian Rewards - Chapter 7 development environment
+# Three MultiChain Community Edition nodes simulate Meridian's three
+# primary sites from Chapter 4 (Charlotte/US, London/UK, Hyderabad/India).
+# This composition is for LOCAL DEVELOPMENT ONLY. See Section 7.8 and
+# docs/production-notes.md for the production-grade topology.
+
+networks:
+  meridian-net:
+    driver: bridge
+
+volumes:
+  multichain-us-data:
+  multichain-uk-data:
+  multichain-india-data:
+
+services:
+
+  # ---------------------------------------------------------------
+  # MultiChain Community Edition nodes (one per Meridian region)
+  # ---------------------------------------------------------------
+  multichain-us:
+    build:
+      context: ./docker/multichain-us
+    container_name: multichain-us
+    hostname: multichain-us
+    environment:
+      - CHAIN_NAME=meridianrewards
+      - NODE_REGION=us-east
+      - NODE_ROLE=seed
+      - RPC_USER=meridian-us-rpc
+      - RPC_PASSWORD=devpassword-us-only
+      - RPC_PORT=9741
+      - NETWORK_PORT=9740
+    ports:
+      - "9741:9741"
+      - "9740:9740"
+    volumes:
+      - multichain-us-data:/root/.multichain
+    networks:
+      meridian-net:
+        aliases: [multichain-us]
+
+  multichain-uk:
+    build:
+      context: ./docker/multichain-uk
+    container_name: multichain-uk
+    hostname: multichain-uk
+    depends_on:
+      - multichain-us
+    environment:
+      - CHAIN_NAME=meridianrewards
+      - NODE_REGION=uk-london
+      - NODE_ROLE=peer
+      - SEED_HOST=multichain-us
+      - SEED_NETWORK_PORT=9740
+      - RPC_USER=meridian-uk-rpc
+      - RPC_PASSWORD=devpassword-uk-only
+      - RPC_PORT=9742
+      - NETWORK_PORT=9743
+    ports:
+      - "9742:9742"
+      - "9743:9743"
+    volumes:
+      - multichain-uk-data:/root/.multichain
+    networks:
+      meridian-net:
+        aliases: [multichain-uk]
+
+  multichain-india:
+    build:
+      context: ./docker/multichain-india
+    container_name: multichain-india
+    hostname: multichain-india
+    depends_on:
+      - multichain-us
+    environment:
+      - CHAIN_NAME=meridianrewards
+      - NODE_REGION=india-hyderabad
+      - NODE_ROLE=peer
+      - SEED_HOST=multichain-us
+      - SEED_NETWORK_PORT=9740
+      - RPC_USER=meridian-india-rpc
+      - RPC_PASSWORD=devpassword-india-only
+      - RPC_PORT=9744
+      - NETWORK_PORT=9745
+    ports:
+      - "9744:9744"
+      - "9745:9745"
+    volumes:
+      - multichain-india-data:/root/.multichain
+    networks:
+      meridian-net:
+        aliases: [multichain-india]
+
+  # ---------------------------------------------------------------
+  # Mock external systems (WireMock) - one instance per region so
+  # region-specific Workday/Okta/GiftFlex response fixtures can differ
+  # (locales, currencies, statutory fields).
+  # ---------------------------------------------------------------
+  wiremock-us:
+    image: wiremock/wiremock:3.9.1
+    container_name: wiremock-us
+    command: ["--port", "8081", "--root-dir", "/home/wiremock", "--verbose"]
+    volumes:
+      - ./wiremock-us:/home/wiremock
+    ports:
+      - "8081:8081"
+    networks:
+      meridian-net:
+        aliases: [wiremock-us]
+
+  wiremock-uk:
+    image: wiremock/wiremock:3.9.1
+    container_name: wiremock-uk
+    command: ["--port", "8082", "--root-dir", "/home/wiremock", "--verbose"]
+    volumes:
+      - ./wiremock-uk:/home/wiremock
+    ports:
+      - "8082:8082"
+    networks:
+      meridian-net:
+        aliases: [wiremock-uk]
+
+  wiremock-india:
+    image: wiremock/wiremock:3.9.1
+    container_name: wiremock-india
+    command: ["--port", "8083", "--root-dir", "/home/wiremock", "--verbose"]
+    volumes:
+      - ./wiremock-india:/home/wiremock
+    ports:
+      - "8083:8083"
+    networks:
+      meridian-net:
+        aliases: [wiremock-india]
+
+  # ---------------------------------------------------------------
+  # Node.js business logic / API layer (talks to multichain-us RPC
+  # by default; REGION env var controls which WireMock set it uses)
+  # ---------------------------------------------------------------
+  rewards-api:
+    build:
+      context: ./nodejs-api
+    container_name: rewards-api
+    depends_on:
+      - multichain-us
+      - multichain-uk
+      - multichain-india
+      - wiremock-us
+      - wiremock-uk
+      - wiremock-india
+    environment:
+      - PORT=4000
+      - REGION=us-east
+      - MULTICHAIN_HOST=multichain-us
+      - MULTICHAIN_RPC_PORT=9741
+      - MULTICHAIN_RPC_USER=meridian-us-rpc
+      - MULTICHAIN_RPC_PASSWORD=devpassword-us-only
+      - MULTICHAIN_CHAIN_NAME=meridianrewards
+      - WORKDAY_MOCK_URL=http://wiremock-us:8081
+      - OKTA_MOCK_URL=http://wiremock-us:8081
+      - GIFTFLEX_MOCK_URL=http://wiremock-us:8081
+      - JWT_SIGNING_SECRET=dev-only-secret-do-not-use-in-prod
+    ports:
+      - "4000:4000"
+    networks:
+      meridian-net:
+        aliases: [rewards-api]
+
+  # ---------------------------------------------------------------
+  # Streamlit self-service / administration UI
+  # ---------------------------------------------------------------
+  rewards-ui:
+    build:
+      context: ./streamlit-ui
+    container_name: rewards-ui
+    depends_on:
+      - rewards-api
+    environment:
+      - REWARDS_API_BASE_URL=http://rewards-api:4000
+    ports:
+      - "8501:8501"
+    networks:
+      meridian-net:
+        aliases: [rewards-ui]

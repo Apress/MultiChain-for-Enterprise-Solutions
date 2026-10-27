@@ -1,0 +1,8 @@
+{
+  "request": { "method": "GET", "urlPathPattern": "/giftflex/v1/catalog/.*" },
+  "response": {
+    "status": 200,
+    "jsonBody": { "sku": "gc-amzn-25", "pointCost": 2500, "currency": "INR" },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

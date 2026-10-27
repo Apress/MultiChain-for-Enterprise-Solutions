@@ -1,0 +1,77 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Fig7.1-DevTopology" id="fig71">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Figure 7.1 - Meridian Rewards Development Environment (3-Region Docker Compose)" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="20" width="900" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- US region box -->
+        <mxCell id="usBox" value="US Region (Charlotte, dev)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="70" width="260" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="mcUS" value="multichain-us&#10;(seed node)&#10;RPC 9741 / P2P 9740" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="90" y="110" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wmUS" value="wiremock-us&#10;Workday / Okta / GiftFlex&#10;port 8081" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="90" y="190" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="apiUS" value="rewards-api (Node.js)&#10;port 4000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="90" y="270" width="200" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- UK region box -->
+        <mxCell id="ukBox" value="UK Region (London, dev)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="420" y="70" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="mcUK" value="multichain-uk&#10;(peer node)&#10;RPC 9742 / P2P 9743" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="450" y="110" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wmUK" value="wiremock-uk&#10;port 8082" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- India region box -->
+        <mxCell id="inBox" value="India Region (Hyderabad, dev)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="780" y="70" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="mcIN" value="multichain-india&#10;(peer node)&#10;RPC 9744 / P2P 9745" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="810" y="110" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wmIN" value="wiremock-india&#10;port 8083" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="810" y="190" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Shared UI -->
+        <mxCell id="ui" value="rewards-ui (Streamlit)&#10;port 8501&#10;Login establishes role" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="440" y="400" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Docker network -->
+        <mxCell id="net" value="Docker bridge network: meridian-net" style="rounded=0;dashed=1;whiteSpace=wrap;html=1;fillColor=none;verticalAlign=top;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1020" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="mcUS" target="mcUK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="mcUS" target="mcIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="apiUS" target="mcUS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="apiUS" target="wmUS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="ui" target="apiUS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

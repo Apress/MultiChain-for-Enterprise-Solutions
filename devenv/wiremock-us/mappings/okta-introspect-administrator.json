@@ -1,0 +1,20 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "urlPath": "/okta/v1/introspect",
+    "bodyPatterns": [
+      { "equalToJson": "{\"token\":\"demo-admin-token\"}" }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "active": true,
+      "userId": "adm-us-0007",
+      "groups": ["administrator"],
+      "region": "us-east"
+    },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

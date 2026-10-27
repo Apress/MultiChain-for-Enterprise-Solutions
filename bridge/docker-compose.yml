@@ -1,0 +1,87 @@
+# Chapter 10 companion environment.
+#
+# Extends the pattern Listing 6.3 established for the Meridian Rewards
+# development chain: everything a reader needs to run this chapter's
+# worked examples locally, in one docker compose file, with no
+# production credentials, no testnet faucet, and no live consortium
+# network required.
+#
+# Services:
+#   multichain-node        Same image and configuration as Listing 6.3,
+#                           the Meridian Rewards development chain.
+#   ethereum-node           A local Hardhat network standing in for
+#                           ethereum-sepolia in Section 10.5.
+#   corda-flow-simulator    The REST facade simulator from
+#                           corda-flow-simulator/server.js, standing in
+#                           for a real CorDapp webserver plugin, per
+#                           Section 10.6 and docs/ARCHITECTURE.md.
+#   bridge-service          This chapter's bridge orchestrator
+#                           (bridge-service/src/index.js).
+#
+# Usage:
+#   docker compose up -d multichain-node ethereum-node corda-flow-simulator
+#   (initialize streams and deploy the NFT contract per README.md)
+#   docker compose up bridge-service
+
+version: "3.8"
+
+services:
+  multichain-node:
+    image: multichain/multichain:2.3.3
+    container_name: meridian-rewards-dev
+    environment:
+      - CHAIN_NAME=meridian-rewards-dev
+    ports:
+      - "8570:8570"
+      - "8571:8571"
+    volumes:
+      - multichain-data:/root/.multichain
+    command: >
+      sh -c "multichain-util create meridian-rewards-dev
+      -anyone-can-connect=true
+      -anyone-can-send=true
+      -anyone-can-receive=true
+      -anyone-can-create=true
+      -anyone-can-issue=false
+      -anyone-can-activate=true
+      && multichaind meridian-rewards-dev -daemon
+      -rpcuser=meridian -rpcpassword=devpassword
+      -rpcallowip=0.0.0.0/0 -server"
+
+  ethereum-node:
+    build:
+      context: ./ethereum-contracts
+      dockerfile: Dockerfile
+    container_name: meridian-rewards-ethereum-dev
+    ports:
+      - "8545:8545"
+    command: ["npx", "hardhat", "node", "--hostname", "0.0.0.0"]
+
+  corda-flow-simulator:
+    build:
+      context: ./corda-flow-simulator
+      dockerfile: Dockerfile
+    container_name: meridian-rewards-corda-simulator
+    ports:
+      - "9200:9200"
+    environment:
+      - CORDA_SIMULATOR_PORT=9200
+
+  bridge-service:
+    build:
+      context: ./bridge-service
+      dockerfile: Dockerfile
+    container_name: meridian-rewards-bridge-service
+    depends_on:
+      - multichain-node
+      - ethereum-node
+      - corda-flow-simulator
+    env_file:
+      - ./bridge-service/.env
+    environment:
+      - MULTICHAIN_RPC_HOST=multichain-node
+      - ETHEREUM_RPC_URL=http://ethereum-node:8545
+      - CORDA_FACADE_HOST=corda-flow-simulator
+
+volumes:
+  multichain-data:

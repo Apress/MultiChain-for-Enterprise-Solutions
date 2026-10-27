@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/workday/v1/employees/[^/]+/status"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": { "status": "active", "region": "us-east" },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

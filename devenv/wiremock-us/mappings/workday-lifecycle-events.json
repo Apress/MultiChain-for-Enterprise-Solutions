@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/workday/v1/lifecycle-events"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "region": "us-east",
+      "events": [
+        {
+          "workdayEventId": "wd-evt-us-77234410",
+          "employeeId": "emp-ps-9a12f6c3",
+          "eventType": "service-anniversary-5yr"
+        },
+        {
+          "workdayEventId": "wd-evt-us-77234411",
+          "employeeId": "emp-ps-4b8801aa",
+          "eventType": "compliance-training-completed"
+        }
+      ]
+    },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

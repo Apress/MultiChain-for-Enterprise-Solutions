@@ -1,0 +1,35 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Fig7.3-RedemptionSequence" id="fig73">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Figure 7.3 - WF-5 Gift Card Redemption Sequence (point lock pattern)" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="140" y="10" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="lEmp" value="Employee (UI)" style="text;html=1;align=center;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="40" y="60" width="140" height="20" as="geometry"/></mxCell>
+        <mxCell id="lApi" value="rewards-api" style="text;html=1;align=center;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="240" y="60" width="140" height="20" as="geometry"/></mxCell>
+        <mxCell id="lChain" value="MultiChain&#10;redemption-events" style="text;html=1;align=center;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="440" y="60" width="140" height="30" as="geometry"/></mxCell>
+        <mxCell id="lGF" value="GiftFlex (WireMock)" style="text;html=1;align=center;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="640" y="60" width="160" height="20" as="geometry"/></mxCell>
+
+        <mxCell id="lifeEmp" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="110" y="90" as="sourcePoint"/><mxPoint x="110" y="560" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="lifeApi" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="90" as="sourcePoint"/><mxPoint x="310" y="560" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="lifeChain" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="510" y="90" as="sourcePoint"/><mxPoint x="510" y="560" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="lifeGF" style="endArrow=none;dashed=1;html=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="720" y="90" as="sourcePoint"/><mxPoint x="720" y="560" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. POST /redemptions/giftcard" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeEmp" target="lifeApi"><mxGeometry relative="1" as="geometry"><mxPoint x="110" y="120" as="sourcePoint"/><mxPoint x="310" y="120" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. check balance (asset/stream reducer)" style="html=1;fontSize=10;dashed=1;" edge="1" parent="1" source="lifeApi" target="lifeApi"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="160" as="sourcePoint"/><mxPoint x="380" y="160" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. publish point-lock item" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeApi" target="lifeChain"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="200" as="sourcePoint"/><mxPoint x="510" y="200" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. POST /giftflex/v1/fulfil (SKU, qty, pseudonymous token only)" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeApi" target="lifeGF"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="250" as="sourcePoint"/><mxPoint x="720" y="250" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5a. confirmed + redemption code" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeGF" target="lifeApi"><mxGeometry relative="1" as="geometry"><mxPoint x="720" y="300" as="sourcePoint"/><mxPoint x="310" y="300" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6a. publish redemption-confirmed" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeApi" target="lifeChain"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="340" as="sourcePoint"/><mxPoint x="510" y="340" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="or 5b. timeout / failure" style="html=1;fontSize=10;fontColor=#B85450;" edge="1" parent="1" source="lifeGF" target="lifeApi"><mxGeometry relative="1" as="geometry"><mxPoint x="720" y="390" as="sourcePoint"/><mxPoint x="310" y="390" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="6b. publish point-lock-released (no point loss)" style="html=1;fontSize=10;fontColor=#B85450;" edge="1" parent="1" source="lifeApi" target="lifeChain"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="430" as="sourcePoint"/><mxPoint x="510" y="430" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="7. response to employee" style="html=1;fontSize=10;" edge="1" parent="1" source="lifeApi" target="lifeEmp"><mxGeometry relative="1" as="geometry"><mxPoint x="310" y="480" as="sourcePoint"/><mxPoint x="110" y="480" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

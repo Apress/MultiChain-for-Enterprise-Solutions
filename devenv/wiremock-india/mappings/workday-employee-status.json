@@ -1,0 +1,8 @@
+{
+  "request": { "method": "GET", "urlPathPattern": "/workday/v1/employees/[^/]+/status" },
+  "response": {
+    "status": 200,
+    "jsonBody": { "status": "active", "region": "india-hyderabad" },
+    "headers": { "Content-Type": "application/json" }
+  }
+}

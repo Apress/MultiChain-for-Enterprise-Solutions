@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/giftflex/v1/fulfil",
+    "bodyPatterns": [ { "matchesJsonPath": "$.sku" } ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": { "status": "confirmed", "redemptionCode": "GF-INR-DEMO-CODE-0001" },
+    "headers": { "Content-Type": "application/json" },
+    "fixedDelayMilliseconds": 500
+  }
+}

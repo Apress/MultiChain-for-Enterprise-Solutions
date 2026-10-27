@@ -1,0 +1,74 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Fig7.2-ComponentArchitecture" id="fig72">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Figure 7.2 - Chapter 7 Component Architecture and Request Flow" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="140" y="10" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui" value="Streamlit UI&#10;(role-based screens)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth" value="auth.js middleware&#10;(login / JWT / role check)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="80" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="routes" value="Express routes&#10;/awards /redemptions /corrections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="180" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="services" value="Services (logic layer)&#10;award / redemption / correction / balance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="280" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mcclient" value="multichain/client.js&#10;(single RPC seam)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="390" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chain" value="MultiChain node(s)&#10;award-events / redemption-events /&#10;correction-events / offboarding-events / audit-index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="480" width="240" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="integrations" value="integrations/*.js&#10;workday / okta / giftflex clients" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="620" y="280" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wiremock" value="WireMock&#10;(Workday / Okta / GiftFlex mocks,&#10;region-specific fixtures)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="620" y="390" width="220" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="1. login (Okta token)" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" parent="1" source="ui" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="2. session JWT" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" parent="1" source="auth" target="ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="3. API call + bearer token" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" parent="1" source="ui" target="routes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="routes" target="services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="publish / list" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=10;" edge="1" parent="1" source="services" target="mcclient">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="mcclient" target="chain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="services" target="integrations">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="integrations" target="wiremock">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="auth" target="integrations">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

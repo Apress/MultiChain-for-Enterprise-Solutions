@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "url": "/workday/v1/lifecycle-events" },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "region": "india-hyderabad",
+      "events": [
+        { "workdayEventId": "wd-evt-in-91007742", "employeeId": "emp-ps-51fa88c1", "eventType": "service-anniversary-10yr" }
+      ]
+    },
+    "headers": { "Content-Type": "application/json" }
+  }
+}
